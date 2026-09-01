@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="saffronGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF9933" />
+      <stop offset="100%" stop-color="#E65100" />
+    </linearGradient>
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#138808" />
+      <stop offset="100%" stop-color="#0B5345" />
+    </linearGradient>
+    <linearGradient id="navyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F2C59" />
+      <stop offset="100%" stop-color="#071931" />
+    </linearGradient>
+  </defs>
+  <!-- Outer Ring -->
+  <circle cx="50" cy="50" r="46" fill="url(#navyGrad)" stroke="url(#saffronGrad)" stroke-width="2.5" />
+  <!-- Ashoka Chakra Spokes Hub -->
+  <circle cx="50" cy="50" r="32" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="2 3" opacity="0.8" />
+  <circle cx="50" cy="50" r="10" fill="#1D4ED8" stroke="#FFFFFF" stroke-width="1.5" />
+  <circle cx="50" cy="50" r="4" fill="#FFFFFF" />
+  <!-- Digital Nodes & Pulse Tracks -->
+  <path d="M50 8 L50 24 M50 76 L50 92 M8 50 L24 50 M76 50 L92 50" stroke="#FF9933" stroke-width="2" stroke-linecap="round" />
+  <circle cx="50" cy="8" r="3.5" fill="#FF9933" />
+  <circle cx="50" cy="92" r="3.5" fill="#138808" />
+  <circle cx="8" cy="50" r="3.5" fill="#2563EB" />
+  <circle cx="92" cy="50" r="3.5" fill="#F59E0B" />
+  <!-- Census 2027 Monogram -->
+  <text x="50" y="44" font-family="'Outfit', sans-serif" font-size="10" font-weight="900" fill="#FF9933" text-anchor="middle" letter-spacing="1">CENSUS</text>
+  <text x="50" y="62" font-family="'Outfit', sans-serif" font-size="13" font-weight="900" fill="#38BDF8" text-anchor="middle" letter-spacing="1">2027</text>
+</svg>
