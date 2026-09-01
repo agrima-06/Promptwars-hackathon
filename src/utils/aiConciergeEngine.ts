@@ -343,3 +343,6 @@ export const generateConciergeResponse = (
     ],
   };
 };
+
+export const processUserConciergeQuery = generateConciergeResponse;
+

@@ -83,3 +83,12 @@ export const getStoredSeId = (): GeneratedSeIdRecord | null => {
     return null;
   }
 };
+
+export const clearStoredSeId = (): void => {
+  try {
+    localStorage.removeItem('census_2027_active_se_id');
+  } catch (e) {
+    console.error('Storage clear error', e);
+  }
+};
+

@@ -273,10 +273,11 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
             {/* State Select (All 36 States & UTs) */}
             <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>
+              <label htmlFor="stateSelectInput" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>
                 State / Union Territory (36 Total)
               </label>
               <select
+                id="stateSelectInput"
                 value={selectedStateCode}
                 onChange={(e) => setSelectedStateCode(e.target.value)}
                 style={{
@@ -299,10 +300,11 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
 
             {/* Cascading District Dropdown */}
             <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>
+              <label htmlFor="districtSelectInput" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>
                 District in {currentStateObj.name} ({currentStateObj.districtsCount} Districts)
               </label>
               <select
+                id="districtSelectInput"
                 value={districtName}
                 onChange={(e) => setDistrictName(e.target.value)}
                 style={{
@@ -408,6 +410,7 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <button
               className="btn btn-primary"
+              data-testid="btn-step1-next"
               disabled={!privacyAgreed || !isOtpVerified}
               onClick={() => setCurrentStep(2)}
             >
@@ -582,7 +585,7 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
               <ArrowLeft size={16} />
               <span>Back</span>
             </button>
-            <button className="btn btn-primary" onClick={() => setCurrentStep(3)}>
+            <button className="btn btn-primary" data-testid="btn-step2-next" onClick={() => setCurrentStep(3)}>
               <span>Proceed to Phase II (Demographics)</span>
               <ArrowRight size={16} />
             </button>
@@ -731,7 +734,7 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
               <ArrowLeft size={16} />
               <span>Back</span>
             </button>
-            <button className="btn btn-primary" onClick={() => setCurrentStep(4)}>
+            <button className="btn btn-primary" data-testid="btn-step3-next" onClick={() => setCurrentStep(4)}>
               <span>Proceed to Geolocation Tagging</span>
               <ArrowRight size={16} />
             </button>
@@ -893,7 +896,7 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
               <ArrowLeft size={16} />
               <span>Back</span>
             </button>
-            <button className="btn btn-primary" onClick={handleFinalSubmit}>
+            <button className="btn btn-primary" data-testid="btn-step4-submit" onClick={handleFinalSubmit}>
               <Sparkles size={16} />
               <span>Generate Official Mock SE ID Card</span>
             </button>
