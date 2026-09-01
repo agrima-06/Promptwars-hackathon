@@ -20,7 +20,7 @@ import {
   Users,
   Shield,
   HelpCircle,
-  RotateCcw,
+  BookOpen,
 } from 'lucide-react';
 
 interface GenAIChatbotProps {
@@ -42,12 +42,12 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
   const [isTyping, setIsTyping] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [filterPhase, setFilterPhase] = useState<'All' | 'Phase 1' | 'Phase 2' | 'Privacy'>('All');
+  const [filterPhase, setFilterPhase] = useState<'All' | 'Phase 1' | 'Phase 2' | 'Legal'>('All');
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const speechRecognizerRef = useRef<any>(null);
 
-  // Sync welcome message on language switch if only welcome message is present
+  // Sync initial welcome message when user switches global language
   useEffect(() => {
     if (messages.length === 1 && messages[0].sender === 'ai') {
       setMessages([INITIAL_CONCIERGE_MESSAGES[currentLanguage] || INITIAL_CONCIERGE_MESSAGES.en]);
@@ -73,12 +73,12 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
     setInputText('');
     setIsTyping(true);
 
-    // Simulate realistic GenAI streaming delay
+    // Realistic GenAI streaming response
     setTimeout(() => {
       const aiResponse = generateConciergeResponse(query, currentLanguage);
       setMessages((prev) => [...prev, aiResponse]);
       setIsTyping(false);
-    }, 450);
+    }, 400);
   };
 
   const handleVoiceInput = () => {
@@ -92,7 +92,7 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
     speechRecognizerRef.current = recognizer;
 
     if (!recognizer.isSupported) {
-      alert('Speech recognition is not supported in this browser. Please try Chrome/Edge or type your query.');
+      alert('Speech recognition is not supported in this browser. Please try typing your query.');
       return;
     }
 
@@ -106,7 +106,7 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
         }
       },
       (err) => {
-        console.error('Speech error', err);
+        console.warn('Speech error', err);
         setIsListening(false);
       }
     );
@@ -118,13 +118,25 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const quickPromptPills = [
-    { label: '31 Questions in Phase 1', icon: Home, query: 'What are the 31 questions in Phase 1?' },
-    { label: 'Generate SE ID', icon: Sparkles, query: 'How do I generate my Self-Enumeration ID (SE ID)?' },
-    { label: 'Phase 2 & Caste Details', icon: Users, query: 'How will Caste and Demographics be collected in Phase 2?' },
-    { label: 'Privacy & Tax Rumor', icon: Shield, query: 'Is census data shared with Income Tax authorities?' },
-    { label: 'State Survey Dates', icon: HelpCircle, query: 'What is the schedule for Uttar Pradesh and Maharashtra?' },
-  ];
+  // Language-specific quick starter prompt pills
+  const getPromptPills = () => {
+    if (currentLanguage === 'hi') {
+      return [
+        { label: '31 मकान सूचीकरण प्रश्न', icon: Home, query: 'चरण 1 में कौन से 31 प्रश्न पूछे जाएंगे?' },
+        { label: 'पक्का बनाम कच्चा मकान', icon: BookOpen, query: 'पक्का और कच्चा मकान कैसे तय होता है?' },
+        { label: 'SE ID कैसे बनाएं?', icon: Sparkles, query: 'मैं अपनी स्व-गणना आईडी (SE ID) कैसे बनाऊं?' },
+        { label: 'जाति व जनसांख्यिकी गणना', icon: Users, query: 'चरण 2 में जाति एवं जनसांख्यिकी गणना कैसे होगी?' },
+        { label: 'धारा 15 गोपनीयता नियम', icon: Shield, query: 'क्या जनगणना डेटा आयकर विभाग या पुलिस को दिया जाता है?' },
+      ];
+    }
+    return [
+      { label: '31 Questions in Phase 1', icon: Home, query: 'What are the 31 questions in Phase 1?' },
+      { label: 'Pucca vs Kutcha Housing', icon: BookOpen, query: 'How is Pucca vs Kutcha house categorized?' },
+      { label: 'Generate SE ID', icon: Sparkles, query: 'How do I generate my Self-Enumeration ID (SE ID)?' },
+      { label: 'Phase 2 & Caste Details', icon: Users, query: 'How will Caste and Demographics be enumerated in Phase 2?' },
+      { label: 'Section 15 Tax Immunity', icon: Shield, query: 'Is my Census data shared with Income Tax or Police?' },
+    ];
+  };
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.25rem' }}>
@@ -161,8 +173,8 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <h2 style={{ fontSize: '1.4rem', color: '#ffffff' }}>Samvaad 2027 • GenAI Concierge</h2>
-              <span className="status-badge status-active" style={{ background: 'rgba(16, 185, 129, 0.25)', color: '#34d399' }}>
-                <span className="live-dot" /> Online
+              <span className="status-badge status-active" style={{ background: 'rgba(19, 136, 8, 0.25)', color: '#4ade80' }}>
+                <span className="live-dot" /> Online • ORGI Grounded
               </span>
             </div>
             <p style={{ fontSize: '0.85rem', color: '#94a3b8' }}>
@@ -185,20 +197,30 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
             style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}
             onClick={() => {
               setFilterPhase('Phase 1');
-              handleSendMessage('Tell me all about Phase 1 Houselisting questions.');
+              handleSendMessage(currentLanguage === 'hi' ? 'चरण 1 में कौन से 31 प्रश्न पूछे जाएंगे?' : 'What are the 31 questions in Phase 1?');
             }}
           >
-            <Home size={13} /> Phase 1 (Amenities)
+            <Home size={13} /> Phase 1 (Housing)
           </button>
           <button
             className={`btn ${filterPhase === 'Phase 2' ? 'btn-primary' : 'btn-outline'}`}
             style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}
             onClick={() => {
               setFilterPhase('Phase 2');
-              handleSendMessage('Tell me about Phase 2 Population & Caste enumeration.');
+              handleSendMessage(currentLanguage === 'hi' ? 'चरण 2 में जाति एवं जनसांख्यिकी गणना कैसे होगी?' : 'Tell me about Phase 2 Population & Caste enumeration.');
             }}
           >
             <Users size={13} /> Phase 2 (Demographics)
+          </button>
+          <button
+            className={`btn ${filterPhase === 'Legal' ? 'btn-primary' : 'btn-outline'}`}
+            style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}
+            onClick={() => {
+              setFilterPhase('Legal');
+              handleSendMessage(currentLanguage === 'hi' ? 'जनगणना अधिनियम 1948 की धारा 15 के क्या नियम हैं?' : 'Explain Section 15 privacy protections under Census Act 1948.');
+            }}
+          >
+            <Shield size={13} /> Section 15 Privacy
           </button>
         </div>
       </div>
@@ -238,7 +260,7 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
                           style={{
                             fontSize: '0.7rem',
                             padding: '0.1rem 0.4rem',
-                            background: 'rgba(56, 189, 248, 0.15)',
+                            background: 'rgba(2, 132, 199, 0.15)',
                             color: '#0284c7',
                             borderRadius: '4px',
                           }}
@@ -258,7 +280,7 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
                           cursor: 'pointer',
                           padding: '2px',
                         }}
-                        title="Read this answer aloud"
+                        title="Read this answer aloud in selected language"
                       >
                         <Volume2 size={15} />
                       </button>
@@ -268,7 +290,7 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
                         style={{
                           background: 'none',
                           border: 'none',
-                          color: copiedId === msg.id ? '#10b981' : 'var(--text-muted)',
+                          color: copiedId === msg.id ? '#138808' : 'var(--text-muted)',
                           cursor: 'pointer',
                           padding: '2px',
                         }}
@@ -348,7 +370,7 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
             >
               <Sparkles size={14} className="live-dot" />
               <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                Samvaad 2027 is thinking & citing legal rules...
+                Samvaad 2027 is citing ORGI rules...
               </span>
             </div>
           )}
@@ -370,7 +392,7 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
           <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
             Quick Prompts:
           </span>
-          {quickPromptPills.map((pill, idx) => {
+          {getPromptPills().map((pill, idx) => {
             const PillIcon = pill.icon;
             return (
               <button
@@ -419,7 +441,7 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
               height: '42px',
             }}
             onClick={handleVoiceInput}
-            title={isListening ? 'Listening... Speak now' : 'Speak to AI (Voice-to-Text)'}
+            title={isListening ? 'Listening... Speak now' : 'Speak to AI in selected language'}
           >
             {isListening ? <MicOff size={18} /> : <Mic size={18} />}
           </button>
@@ -439,7 +461,7 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
               flex: 1,
               padding: '0.75rem 1rem',
               borderRadius: 'var(--radius-md)',
-              border: isListening ? '2px solid #f43f5e' : '1px solid var(--border-subtle)',
+              border: isListening ? '2px solid #e11d48' : '1px solid var(--border-subtle)',
               background: 'var(--bg-tertiary)',
               color: 'var(--text-primary)',
               outline: 'none',

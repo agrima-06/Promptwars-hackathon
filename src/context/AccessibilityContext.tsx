@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useLanguage } from './LanguageContext';
 import { speakText, stopSpeaking } from '../utils/speechUtils';
 
@@ -55,43 +55,58 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     document.documentElement.setAttribute('data-contrast', contrast);
   }, [contrast]);
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
-  };
+  // Stop speech synthesis on unmount or tab switch if needed
+  useEffect(() => {
+    return () => {
+      stopSpeaking();
+    };
+  }, []);
 
-  const toggleContrast = () => {
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+  }, []);
+
+  const toggleContrast = useCallback(() => {
     setContrast((prev) => (prev === 'normal' ? 'high' : 'normal'));
-  };
+  }, []);
 
   const fontScaleSteps: FontScale[] = ['sm', 'md', 'lg', 'xl'];
 
-  const increaseFontSize = () => {
-    const currentIndex = fontScaleSteps.indexOf(fontScale);
-    if (currentIndex < fontScaleSteps.length - 1) {
-      setFontScale(fontScaleSteps[currentIndex + 1]);
-    }
-  };
+  const increaseFontSize = useCallback(() => {
+    setFontScale((current) => {
+      const idx = fontScaleSteps.indexOf(current);
+      return idx < fontScaleSteps.length - 1 ? fontScaleSteps[idx + 1] : current;
+    });
+  }, []);
 
-  const decreaseFontSize = () => {
-    const currentIndex = fontScaleSteps.indexOf(fontScale);
-    if (currentIndex > 0) {
-      setFontScale(fontScaleSteps[currentIndex - 1]);
-    }
-  };
+  const decreaseFontSize = useCallback(() => {
+    setFontScale((current) => {
+      const idx = fontScaleSteps.indexOf(current);
+      return idx > 0 ? fontScaleSteps[idx - 1] : current;
+    });
+  }, []);
 
-  const resetFontSize = () => {
+  const resetFontSize = useCallback(() => {
     setFontScale('md');
-  };
+  }, []);
 
-  const readAloud = (text: string) => {
-    setIsAudioReading(true);
-    speakText(text, currentLanguage);
-  };
+  const readAloud = useCallback(
+    (text: string) => {
+      setIsAudioReading(true);
+      speakText(
+        text,
+        currentLanguage,
+        () => setIsAudioReading(false),
+        () => setIsAudioReading(false)
+      );
+    },
+    [currentLanguage]
+  );
 
-  const stopAudio = () => {
+  const stopAudio = useCallback(() => {
     setIsAudioReading(false);
     stopSpeaking();
-  };
+  }, []);
 
   return (
     <AccessibilityContext.Provider
