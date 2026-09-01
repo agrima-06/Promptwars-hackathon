@@ -16,14 +16,16 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab }) => {
         background: 'var(--navy-900)',
         color: '#e2e8f0',
         borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-        padding: '3rem 1.25rem 1.5rem',
+        padding: '3rem 1.5rem 1.5rem',
         marginTop: 'auto',
+        width: '100%',
+        boxSizing: 'border-box',
       }}
     >
       <div
         style={{
-          maxWidth: '1380px',
-          margin: '0 auto',
+          width: '100%',
+          maxWidth: '100%',
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           gap: '2.5rem',
