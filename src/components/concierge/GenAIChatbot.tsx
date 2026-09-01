@@ -278,153 +278,156 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
 
       {/* Main Chat Interface */}
       <div className="chat-container glass-card">
-        {/* Messages Feed */}
+        {/* Messages Feed with Centered Thread Wrapper */}
         <div className="chat-messages" ref={chatMessagesRef}>
-          {messages.map((msg) => {
-            const isAi = msg.sender === 'ai';
-            return (
-              <div
-                key={msg.id}
-                className={`chat-bubble ${isAi ? 'chat-bubble-ai' : 'chat-bubble-user'}`}
-                style={{
-                  alignSelf: isAi ? 'flex-start' : 'flex-end',
-                }}
-              >
-                {/* AI Header */}
-                {isAi && (
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      marginBottom: '0.45rem',
-                      fontSize: '0.78rem',
-                      color: 'var(--saffron-500)',
-                      fontWeight: 700,
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                      <Sparkles size={13} />
-                      <span>Samvaad 2027 AI</span>
-                      {msg.phaseContext && (
-                        <span
-                          style={{
-                            fontSize: '0.7rem',
-                            padding: '0.1rem 0.4rem',
-                            background: 'rgba(2, 132, 199, 0.15)',
-                            color: '#0284c7',
-                            borderRadius: '4px',
-                          }}
-                        >
-                          {msg.phaseContext}
-                        </span>
-                      )}
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                      <button
-                        onClick={() => readAloud(msg.text)}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: 'var(--text-muted)',
-                          cursor: 'pointer',
-                          padding: '2px',
-                        }}
-                        title="Read this answer aloud in selected language"
-                      >
-                        <Volume2 size={15} />
-                      </button>
-
-                      <button
-                        onClick={() => handleCopyText(msg.id, msg.text)}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: copiedId === msg.id ? '#138808' : 'var(--text-muted)',
-                          cursor: 'pointer',
-                          padding: '2px',
-                        }}
-                        title="Copy response"
-                      >
-                        {copiedId === msg.id ? <Check size={15} /> : <Copy size={15} />}
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {/* Formatted Markdown Content */}
-                <div style={{ whiteSpace: 'pre-line', fontSize: '0.92rem' }}>{msg.text}</div>
-
-                {/* Suggested Follow-up Pills */}
-                {isAi && msg.suggestedQuestions && msg.suggestedQuestions.length > 0 && (
-                  <div
-                    style={{
-                      marginTop: '0.85rem',
-                      paddingTop: '0.65rem',
-                      borderTop: '1px solid var(--border-subtle)',
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      gap: '0.35rem',
-                    }}
-                  >
-                    {msg.suggestedQuestions.map((q, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => handleSendMessage(q)}
-                        style={{
-                          background: 'var(--bg-card)',
-                          border: '1px solid var(--border-glow)',
-                          color: 'var(--text-primary)',
-                          borderRadius: 'var(--radius-full)',
-                          padding: '0.25rem 0.65rem',
-                          fontSize: '0.78rem',
-                          cursor: 'pointer',
-                          fontWeight: 500,
-                          transition: 'all 0.15s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = 'var(--saffron-500)';
-                          e.currentTarget.style.transform = 'translateY(-1px)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = 'var(--border-glow)';
-                          e.currentTarget.style.transform = 'translateY(0)';
-                        }}
-                      >
-                        💬 {q}
-                      </button>
-                    ))}
-                  </div>
-                )}
-
-                {/* Message Timestamp */}
+          <div className="chat-thread-wrapper">
+            {messages.map((msg) => {
+              const isAi = msg.sender === 'ai';
+              return (
                 <div
-                  style={{
-                    fontSize: '0.7rem',
-                    color: isAi ? 'var(--text-muted)' : 'rgba(255, 255, 255, 0.7)',
-                    marginTop: '0.35rem',
-                    textAlign: 'right',
-                  }}
+                  key={msg.id}
+                  className={`chat-bubble-row ${isAi ? 'chat-bubble-row-ai' : 'chat-bubble-row-user'}`}
                 >
-                  {msg.timestamp}
+                  <div className={`chat-bubble ${isAi ? 'chat-bubble-ai' : 'chat-bubble-user'}`}>
+                    {/* AI Header */}
+                    {isAi && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          marginBottom: '0.45rem',
+                          fontSize: '0.78rem',
+                          color: 'var(--saffron-500)',
+                          fontWeight: 700,
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                          <Sparkles size={13} />
+                          <span>Samvaad 2027 AI</span>
+                          {msg.phaseContext && (
+                            <span
+                              style={{
+                                fontSize: '0.7rem',
+                                padding: '0.1rem 0.4rem',
+                                background: 'rgba(2, 132, 199, 0.15)',
+                                color: '#0284c7',
+                                borderRadius: '4px',
+                              }}
+                            >
+                              {msg.phaseContext}
+                            </span>
+                          )}
+                        </div>
+
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                          <button
+                            onClick={() => readAloud(msg.text)}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              color: 'var(--text-muted)',
+                              cursor: 'pointer',
+                              padding: '2px',
+                            }}
+                            title="Read this answer aloud in selected language"
+                          >
+                            <Volume2 size={15} />
+                          </button>
+
+                          <button
+                            onClick={() => handleCopyText(msg.id, msg.text)}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              color: copiedId === msg.id ? '#138808' : 'var(--text-muted)',
+                              cursor: 'pointer',
+                              padding: '2px',
+                            }}
+                            title="Copy response"
+                          >
+                            {copiedId === msg.id ? <Check size={15} /> : <Copy size={15} />}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Formatted Markdown Content */}
+                    <div style={{ whiteSpace: 'pre-line', fontSize: '0.92rem' }}>{msg.text}</div>
+
+                    {/* Suggested Follow-up Pills */}
+                    {isAi && msg.suggestedQuestions && msg.suggestedQuestions.length > 0 && (
+                      <div
+                        style={{
+                          marginTop: '0.85rem',
+                          paddingTop: '0.65rem',
+                          borderTop: '1px solid var(--border-subtle)',
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          gap: '0.35rem',
+                        }}
+                      >
+                        {msg.suggestedQuestions.map((q, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => handleSendMessage(q)}
+                            style={{
+                              background: 'var(--bg-card)',
+                              border: '1px solid var(--border-glow)',
+                              color: 'var(--text-primary)',
+                              borderRadius: 'var(--radius-full)',
+                              padding: '0.25rem 0.65rem',
+                              fontSize: '0.78rem',
+                              cursor: 'pointer',
+                              fontWeight: 500,
+                              transition: 'all 0.15s ease',
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.borderColor = 'var(--saffron-500)';
+                              e.currentTarget.style.transform = 'translateY(-1px)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.borderColor = 'var(--border-glow)';
+                              e.currentTarget.style.transform = 'translateY(0)';
+                            }}
+                          >
+                            💬 {q}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Message Timestamp */}
+                    <div
+                      style={{
+                        fontSize: '0.7rem',
+                        color: isAi ? 'var(--text-muted)' : 'rgba(255, 255, 255, 0.7)',
+                        marginTop: '0.35rem',
+                        textAlign: 'right',
+                      }}
+                    >
+                      {msg.timestamp}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Typing Animation */}
+            {isTyping && (
+              <div className="chat-bubble-row chat-bubble-row-ai">
+                <div
+                  className="chat-bubble chat-bubble-ai"
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: 'fit-content' }}
+                >
+                  <Sparkles size={14} className="live-dot" />
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                    Samvaad 2027 is citing ORGI rules...
+                  </span>
                 </div>
               </div>
-            );
-          })}
-
-          {/* Typing Animation */}
-          {isTyping && (
-            <div
-              className="chat-bubble chat-bubble-ai"
-              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: 'fit-content' }}
-            >
-              <Sparkles size={14} className="live-dot" />
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                Samvaad 2027 is citing ORGI rules...
-              </span>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* Quick Starter Pills */}
@@ -433,41 +436,39 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
             padding: '0.65rem 1.25rem',
             background: 'var(--bg-tertiary)',
             borderTop: '1px solid var(--border-subtle)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            overflowX: 'auto',
           }}
         >
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
-            Quick Prompts:
-          </span>
-          {getPromptPills().map((pill, idx) => {
-            const PillIcon = pill.icon;
-            return (
-              <button
-                key={idx}
-                onClick={() => handleSendMessage(pill.query)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.35rem',
-                  padding: '0.35rem 0.75rem',
-                  borderRadius: 'var(--radius-full)',
-                  background: 'var(--bg-card)',
-                  border: '1px solid var(--border-subtle)',
-                  color: 'var(--text-primary)',
-                  fontSize: '0.8rem',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                <PillIcon size={12} color="var(--saffron-500)" />
-                <span>{pill.label}</span>
-              </button>
-            );
-          })}
+          <div className="chat-prompts-wrapper">
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
+              Quick Prompts:
+            </span>
+            {getPromptPills().map((pill, idx) => {
+              const PillIcon = pill.icon;
+              return (
+                <button
+                  key={idx}
+                  onClick={() => handleSendMessage(pill.query)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                    padding: '0.35rem 0.75rem',
+                    borderRadius: 'var(--radius-full)',
+                    background: 'var(--bg-card)',
+                    border: '1px solid var(--border-subtle)',
+                    color: 'var(--text-primary)',
+                    fontSize: '0.8rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  <PillIcon size={12} color="var(--saffron-500)" />
+                  <span>{pill.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Input Bar */}
@@ -476,61 +477,60 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
             padding: '0.85rem 1.25rem',
             background: 'var(--bg-card)',
             borderTop: '1px solid var(--border-subtle)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.75rem',
           }}
         >
-          {/* Voice Input Button */}
-          <button
-            className={`btn ${isListening ? 'mic-active' : 'btn-outline'}`}
-            style={{
-              padding: '0.65rem',
-              borderRadius: '50%',
-              width: '42px',
-              height: '42px',
-            }}
-            onClick={handleVoiceInput}
-            title={isListening ? 'Listening... Speak now' : 'Speak to AI in selected language'}
-          >
-            {isListening ? <MicOff size={18} /> : <Mic size={18} />}
-          </button>
+          <div className="chat-input-wrapper">
+            {/* Voice Input Button */}
+            <button
+              className={`btn ${isListening ? 'mic-active' : 'btn-outline'}`}
+              style={{
+                padding: '0.65rem',
+                borderRadius: '50%',
+                width: '42px',
+                height: '42px',
+              }}
+              onClick={handleVoiceInput}
+              title={isListening ? 'Listening... Speak now' : 'Speak to AI in selected language'}
+            >
+              {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+            </button>
 
-          {/* Text Input */}
-          <input
-            type="text"
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-            placeholder={
-              isListening
-                ? t('listening')
-                : `${t('searchPlaceholder')} (${currentLanguage.toUpperCase()})`
-            }
-            style={{
-              flex: 1,
-              padding: '0.75rem 1rem',
-              borderRadius: 'var(--radius-md)',
-              border: isListening ? '2px solid #e11d48' : '1px solid var(--border-subtle)',
-              background: 'var(--bg-tertiary)',
-              color: 'var(--text-primary)',
-              outline: 'none',
-            }}
-          />
+            {/* Text Input */}
+            <input
+              type="text"
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+              placeholder={
+                isListening
+                  ? t('listening')
+                  : `${t('searchPlaceholder')} (${currentLanguage.toUpperCase()})`
+              }
+              style={{
+                flex: 1,
+                padding: '0.75rem 1rem',
+                borderRadius: 'var(--radius-md)',
+                border: isListening ? '2px solid #e11d48' : '1px solid var(--border-subtle)',
+                background: 'var(--bg-tertiary)',
+                color: 'var(--text-primary)',
+                outline: 'none',
+              }}
+            />
 
-          {/* Send Button */}
-          <button
-            className="btn btn-primary"
-            style={{
-              padding: '0.65rem 1.25rem',
-              borderRadius: 'var(--radius-md)',
-            }}
-            onClick={() => handleSendMessage()}
-            disabled={!inputText.trim()}
-          >
-            <Send size={16} />
-            <span>Send</span>
-          </button>
+            {/* Send Button */}
+            <button
+              className="btn btn-primary"
+              style={{
+                padding: '0.65rem 1.25rem',
+                borderRadius: 'var(--radius-md)',
+              }}
+              onClick={() => handleSendMessage()}
+              disabled={!inputText.trim()}
+            >
+              <Send size={16} />
+              <span>Send</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
