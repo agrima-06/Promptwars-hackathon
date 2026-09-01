@@ -1,5 +1,6 @@
 import { LanguageCode } from '../data/translations';
 import { STATES_DATA } from '../data/statesData';
+import { formatCensusDate, formatCensusDateRange } from './dateUtils';
 
 export interface ChatMessage {
   id: string;
@@ -306,7 +307,7 @@ export const generateConciergeResponse = (
         ? '🟢 **15-Day Self-Enumeration Window is CURRENTLY OPEN!**'
         : '🟡 **Upcoming Self-Enumeration Window**';
 
-    const text = `📍 **Official Census 2027 Schedule for ${matchedState.name} (${matchedState.code})**\n\n${statusText}\n\n- **15-Day Self-Enumeration Window**: \`${matchedState.selfEnumWindowStart}\` to \`${matchedState.selfEnumWindowEnd}\`\n- **Phase I (Houselisting Fieldwork)**: ${matchedState.phase1Start} to ${matchedState.phase1End}\n- **Phase II (Population Enumeration)**: ${matchedState.phase2Start} to ${matchedState.phase2End}\n- **Administrative Coverage**: ${matchedState.districtsCount} Districts | Projected Population: ${matchedState.projectedPopulationMillions} M\n- **Jal Jeevan Tap Water**: ${matchedState.jalJeevanCoveragePct}% | **PM Surya Ghar Solar**: ${matchedState.pmSuryaGharSolarPct}%\n- **State Census Control Room Helpline**: 📞 \`${matchedState.activeHelpline}\`\n- **Nodal Officer**: ${matchedState.nodalOfficer}`;
+    const text = `📍 **Official Census 2027 Schedule for ${matchedState.name} (${matchedState.code})**\n\n${statusText}\n\n- **15-Day Self-Enumeration Window**: \`${formatCensusDate(matchedState.selfEnumWindowStart)}\` to \`${formatCensusDate(matchedState.selfEnumWindowEnd)}\`\n- **Phase I (Houselisting Fieldwork)**: ${formatCensusDate(matchedState.phase1Start)} to ${formatCensusDate(matchedState.phase1End)}\n- **Phase II (Population Enumeration)**: ${formatCensusDate(matchedState.phase2Start)} to ${formatCensusDate(matchedState.phase2End)}\n- **Administrative Coverage**: ${matchedState.districtsCount} Districts | Projected Population: ${matchedState.projectedPopulationMillions} M\n- **Jal Jeevan Tap Water**: ${matchedState.jalJeevanCoveragePct}% | **PM Surya Ghar Solar**: ${matchedState.pmSuryaGharSolarPct}%\n- **State Census Control Room Helpline**: 📞 \`${matchedState.activeHelpline}\`\n- **Nodal Officer**: ${matchedState.nodalOfficer}`;
 
     return {
       id: `ai_${Date.now()}`,

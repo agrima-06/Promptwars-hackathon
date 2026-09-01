@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { STATES_DATA, StateCensusData } from '../../data/statesData';
+import { formatCensusDate, formatCensusDateRange } from '../../utils/dateUtils';
 import {
   MapPin,
   Calendar,
@@ -227,7 +228,7 @@ export const StateTracker: React.FC<StateTrackerProps> = ({ onSelectStateForEnum
                   )}
                 </div>
 
-                {/* Schedules */}
+                {/* Schedules with Clean Text Date Formatting */}
                 <div
                   style={{
                     background: 'var(--bg-tertiary)',
@@ -245,7 +246,7 @@ export const StateTracker: React.FC<StateTrackerProps> = ({ onSelectStateForEnum
                       <Clock size={13} color="var(--saffron-500)" /> 15-Day Pre-Survey:
                     </span>
                     <strong style={{ color: isActive ? '#0d6506' : 'var(--text-primary)' }}>
-                      {st.selfEnumWindowStart} to {st.selfEnumWindowEnd}
+                      {formatCensusDate(st.selfEnumWindowStart)} to {formatCensusDate(st.selfEnumWindowEnd)}
                     </strong>
                   </div>
 
@@ -253,14 +254,14 @@ export const StateTracker: React.FC<StateTrackerProps> = ({ onSelectStateForEnum
                     <span style={{ color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
                       <Calendar size={13} color="#3b82f6" /> Phase I Fieldwork:
                     </span>
-                    <span>{st.phase1Start} to {st.phase1End}</span>
+                    <span>{formatCensusDate(st.phase1Start)} to {formatCensusDate(st.phase1End)}</span>
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <span style={{ color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
                       <Calendar size={13} color="#8b5cf6" /> Phase II Census:
                     </span>
-                    <span>{st.phase2Start} to {st.phase2End}</span>
+                    <span>{formatCensusDate(st.phase2Start)} to {formatCensusDate(st.phase2End)}</span>
                   </div>
                 </div>
 
@@ -362,6 +363,33 @@ export const StateTracker: React.FC<StateTrackerProps> = ({ onSelectStateForEnum
               >
                 ✕
               </button>
+            </div>
+
+            {/* Schedules Timeline Block */}
+            <div
+              style={{
+                background: 'var(--bg-tertiary)',
+                padding: '1rem',
+                borderRadius: 'var(--radius-sm)',
+                marginBottom: '1.25rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.5rem',
+                fontSize: '0.85rem',
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>⏰ 15-Day Self-Enum Window:</span>
+                <strong>{formatCensusDateRange(activeModalState.selfEnumWindowStart, activeModalState.selfEnumWindowEnd)}</strong>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>🏠 Phase I Housing Fieldwork:</span>
+                <strong>{formatCensusDateRange(activeModalState.phase1Start, activeModalState.phase1End)}</strong>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>👥 Phase II Population Census:</span>
+                <strong>{formatCensusDateRange(activeModalState.phase2Start, activeModalState.phase2End)}</strong>
+              </div>
             </div>
 
             {/* Metric Overview Grid */}
