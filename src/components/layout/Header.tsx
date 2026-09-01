@@ -84,17 +84,16 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
 
       {/* Main Header Bar */}
       <div className="header-container">
-        {/* Brand Logo & Emblem with 2-Line Subtitle */}
+        {/* Brand Logo & Emblem with 3-Line Subtitle */}
         <div
           className="brand-badge"
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', flexShrink: 0 }}
           onClick={() => setActiveTab('concierge')}
         >
-          <img src="/favicon.svg" alt="Census 2027 Emblem" className="emblem-icon" />
+          <img src="/favicon.svg" alt="JanData Emblem" className="emblem-icon" />
           <div className="brand-text">
             <h1>
-              <span>CENSUS</span>
-              <span style={{ color: 'var(--saffron-500)' }}>2027</span>
+              <span>JanData</span>
               <span
                 style={{
                   fontSize: '0.65rem',
@@ -107,13 +106,13 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
                   marginLeft: '0.25rem',
                 }}
               >
-                DIGITAL
+                2027
               </span>
             </h1>
-            <p style={{ lineHeight: '1.25', margin: 0, fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-              <span>Government of India •</span>
+            <p style={{ lineHeight: '1.3', margin: 0, fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+              <span>Government of India</span>
               <br />
-              <span>Ministry of Home Affairs • ORGI</span>
+              <span>Ministry of Home Affairs</span>
             </p>
           </div>
         </div>
@@ -130,7 +129,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
                 onClick={() => setActiveTab(item.id)}
                 aria-label={item.label}
               >
-                <Icon size={16} />
+                <Icon size={15} />
                 <span>{item.label}</span>
               </button>
             );
@@ -138,7 +137,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
         </nav>
 
         {/* Controls: Language, Audio, Font Scale, Theme */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexShrink: 0 }}>
           {/* Language Switcher Dropdown */}
           <div style={{ position: 'relative' }}>
             <button
