@@ -13,8 +13,6 @@ import {
   Moon,
   Volume2,
   VolumeX,
-  Eye,
-  Type,
 } from 'lucide-react';
 
 export type ActiveTab =
@@ -35,9 +33,6 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
   const {
     theme,
     toggleTheme,
-    contrast,
-    toggleContrast,
-    fontScale,
     increaseFontSize,
     decreaseFontSize,
     resetFontSize,
@@ -52,7 +47,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
     if (isAudioReading) {
       stopAudio();
     } else {
-      const summaryText = `${t('portalTitle')}. ${t('motto')}. ${t('privacyGuarantee')}`;
+      const summaryText = `${t('portalTitle')}. Government of India. Ministry of Home Affairs. Office of Registrar General India.`;
       readAloud(summaryText);
     }
   };
@@ -89,7 +84,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
 
       {/* Main Header Bar */}
       <div className="header-container">
-        {/* Brand Logo & Emblem */}
+        {/* Brand Logo & Emblem with 2-Line Subtitle */}
         <div
           className="brand-badge"
           style={{ cursor: 'pointer' }}
@@ -115,7 +110,11 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
                 DIGITAL
               </span>
             </h1>
-            <p>{t('portalSubtitle')}</p>
+            <p style={{ lineHeight: '1.25', margin: 0, fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+              <span>Government of India •</span>
+              <br />
+              <span>Ministry of Home Affairs • ORGI</span>
+            </p>
           </div>
         </div>
 
@@ -138,7 +137,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
           })}
         </nav>
 
-        {/* Controls: Language, Audio, Contrast, Font Scale, Theme */}
+        {/* Controls: Language, Audio, Font Scale, Theme */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           {/* Language Switcher Dropdown */}
           <div style={{ position: 'relative' }}>
@@ -222,21 +221,6 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
             title={isAudioReading ? 'Stop Audio Reader' : 'Listen with Audio Reader'}
           >
             {isAudioReading ? <VolumeX size={16} /> : <Volume2 size={16} />}
-          </button>
-
-          {/* High Contrast Toggle */}
-          <button
-            className="btn btn-outline"
-            style={{
-              padding: '0.45rem',
-              borderRadius: 'var(--radius-sm)',
-              color: contrast === 'high' ? '#ffff00' : 'inherit',
-              borderColor: contrast === 'high' ? '#ffff00' : 'var(--border-subtle)',
-            }}
-            onClick={toggleContrast}
-            title="Toggle High Contrast Mode (Accessibility)"
-          >
-            <Eye size={16} />
           </button>
 
           {/* Font Scaler */}

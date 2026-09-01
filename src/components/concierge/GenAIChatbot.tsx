@@ -44,7 +44,7 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [filterPhase, setFilterPhase] = useState<'All' | 'Phase 1' | 'Phase 2' | 'Legal'>('All');
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatMessagesRef = useRef<HTMLDivElement>(null);
   const speechRecognizerRef = useRef<any>(null);
 
   // Sync initial welcome message when user switches global language
@@ -54,8 +54,11 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
     }
   }, [currentLanguage]);
 
+  // Scroll ONLY the chat messages container internally (avoids page jumping to footer on reload)
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (chatMessagesRef.current) {
+      chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
+    }
   }, [messages, isTyping]);
 
   const handleSendMessage = (textToSend?: string) => {
@@ -183,44 +186,92 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
           </div>
         </div>
 
-        {/* Phase Filter Tabs */}
-        <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+        {/* Phase Filter Tabs - High Visibility & High Contrast by Default */}
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
           <button
-            className={`btn ${filterPhase === 'All' ? 'btn-primary' : 'btn-outline'}`}
-            style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}
             onClick={() => setFilterPhase('All')}
+            style={{
+              padding: '0.45rem 0.9rem',
+              fontSize: '0.82rem',
+              fontWeight: filterPhase === 'All' ? 800 : 600,
+              borderRadius: 'var(--radius-sm)',
+              border: filterPhase === 'All' ? '1px solid #ff9933' : '1px solid rgba(255, 255, 255, 0.4)',
+              background: filterPhase === 'All' ? 'var(--saffron-500)' : 'rgba(255, 255, 255, 0.15)',
+              color: filterPhase === 'All' ? '#071931' : '#ffffff',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              transition: 'all 0.15s ease',
+            }}
           >
             All Topics
           </button>
           <button
-            className={`btn ${filterPhase === 'Phase 1' ? 'btn-primary' : 'btn-outline'}`}
-            style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}
             onClick={() => {
               setFilterPhase('Phase 1');
               handleSendMessage(currentLanguage === 'hi' ? 'चरण 1 में कौन से 31 प्रश्न पूछे जाएंगे?' : 'What are the 31 questions in Phase 1?');
             }}
+            style={{
+              padding: '0.45rem 0.9rem',
+              fontSize: '0.82rem',
+              fontWeight: filterPhase === 'Phase 1' ? 800 : 600,
+              borderRadius: 'var(--radius-sm)',
+              border: filterPhase === 'Phase 1' ? '1px solid #ff9933' : '1px solid rgba(255, 255, 255, 0.4)',
+              background: filterPhase === 'Phase 1' ? 'var(--saffron-500)' : 'rgba(255, 255, 255, 0.15)',
+              color: filterPhase === 'Phase 1' ? '#071931' : '#ffffff',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              transition: 'all 0.15s ease',
+            }}
           >
-            <Home size={13} /> Phase 1 (Housing)
+            <Home size={14} /> Phase 1 (Housing)
           </button>
           <button
-            className={`btn ${filterPhase === 'Phase 2' ? 'btn-primary' : 'btn-outline'}`}
-            style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}
             onClick={() => {
               setFilterPhase('Phase 2');
               handleSendMessage(currentLanguage === 'hi' ? 'चरण 2 में जाति एवं जनसांख्यिकी गणना कैसे होगी?' : 'Tell me about Phase 2 Population & Caste enumeration.');
             }}
+            style={{
+              padding: '0.45rem 0.9rem',
+              fontSize: '0.82rem',
+              fontWeight: filterPhase === 'Phase 2' ? 800 : 600,
+              borderRadius: 'var(--radius-sm)',
+              border: filterPhase === 'Phase 2' ? '1px solid #ff9933' : '1px solid rgba(255, 255, 255, 0.4)',
+              background: filterPhase === 'Phase 2' ? 'var(--saffron-500)' : 'rgba(255, 255, 255, 0.15)',
+              color: filterPhase === 'Phase 2' ? '#071931' : '#ffffff',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              transition: 'all 0.15s ease',
+            }}
           >
-            <Users size={13} /> Phase 2 (Demographics)
+            <Users size={14} /> Phase 2 (Demographics)
           </button>
           <button
-            className={`btn ${filterPhase === 'Legal' ? 'btn-primary' : 'btn-outline'}`}
-            style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}
             onClick={() => {
               setFilterPhase('Legal');
               handleSendMessage(currentLanguage === 'hi' ? 'जनगणना अधिनियम 1948 की धारा 15 के क्या नियम हैं?' : 'Explain Section 15 privacy protections under Census Act 1948.');
             }}
+            style={{
+              padding: '0.45rem 0.9rem',
+              fontSize: '0.82rem',
+              fontWeight: filterPhase === 'Legal' ? 800 : 600,
+              borderRadius: 'var(--radius-sm)',
+              border: filterPhase === 'Legal' ? '1px solid #ff9933' : '1px solid rgba(255, 255, 255, 0.4)',
+              background: filterPhase === 'Legal' ? 'var(--saffron-500)' : 'rgba(255, 255, 255, 0.15)',
+              color: filterPhase === 'Legal' ? '#071931' : '#ffffff',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              transition: 'all 0.15s ease',
+            }}
           >
-            <Shield size={13} /> Section 15 Privacy
+            <Shield size={14} /> Section 15 Privacy
           </button>
         </div>
       </div>
@@ -228,7 +279,7 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
       {/* Main Chat Interface */}
       <div className="chat-container glass-card">
         {/* Messages Feed */}
-        <div className="chat-messages">
+        <div className="chat-messages" ref={chatMessagesRef}>
           {messages.map((msg) => {
             const isAi = msg.sender === 'ai';
             return (
@@ -374,7 +425,6 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
               </span>
             </div>
           )}
-          <div ref={messagesEndRef} />
         </div>
 
         {/* Quick Starter Pills */}

@@ -1,6 +1,6 @@
 export interface RumorFactItem {
   id: string;
-  category: 'Privacy' | 'Taxation' | 'Citizenship' | 'Biometrics' | 'Legal' | 'Fraud Prevention';
+  category: 'Privacy' | 'Taxation' | 'Citizenship' | 'Biometrics' | 'Legal' | 'Fraud Prevention' | 'Operations';
   rumorClaim: string;
   verdict: 'FALSE' | 'MISLEADING' | 'TRUE' | 'SCAM_ALERT';
   truthScore: number; // 0 (completely false/scam) to 100 (fully verified true)
@@ -12,6 +12,7 @@ export interface RumorFactItem {
 }
 
 export const RUMORS_DATABASE: RumorFactItem[] = [
+  // --- EXISTING 7 ITEMS ---
   {
     id: 'rumor_tax_link',
     category: 'Taxation',
@@ -95,5 +96,137 @@ export const RUMORS_DATABASE: RumorFactItem[] = [
     legalCitation: 'Census Act 1948, Section 8 (Obligation to answer questions) & Section 11 (Penalties)',
     officialAdvice: 'Participating in Census 2027 builds the foundational data required for schools, hospitals, and infrastructure in your neighborhood.',
     tags: ['Legal Duty', 'Census Act 1948', 'Public Good'],
-  }
+  },
+
+  // --- 10 NEW CATEGORIZED ENTRIES ---
+  // 1. Verified Fact #1: Completely Free / Zero Fee
+  {
+    id: 'fact_free_service',
+    category: 'Operations',
+    rumorClaim: 'Census 2027 Self-Enumeration and enumerator home visits are 100% free of charge with zero administrative fees.',
+    verdict: 'TRUE',
+    truthScore: 100,
+    shortVerdict: 'Official Fact: Completely Free Public Service.',
+    detailedAnalysis: 'Census enumeration is entirely funded by the Central Government through the Ministry of Home Affairs. No fee, registration charge, or convenience cess is ever levied on any citizen for self-enumeration or physical verification.',
+    legalCitation: 'ORGI Financial Code & Census Operations Manual 2026-27',
+    officialAdvice: 'Never pay any cash or digital charge to anyone demanding fees for Census enrollment.',
+    tags: ['Free Service', 'Zero Fee', 'Public Service', 'Operations'],
+  },
+  // 2. Verified Fact #2: 22 Scheduled Languages Support
+  {
+    id: 'fact_languages_supported',
+    category: 'Legal',
+    rumorClaim: 'Citizens have the right to answer the Census schedule in any of the 22 Eighth Schedule Indian Languages.',
+    verdict: 'TRUE',
+    truthScore: 100,
+    shortVerdict: 'Official Fact: Multi-Lingual Statutory Inclusivity.',
+    detailedAnalysis: 'ORGI digital schedules and self-enumeration web/mobile apps are translated and supported in 22 Official Indian Languages as recognized in the Eighth Schedule of the Indian Constitution, ensuring total linguistic accessibility.',
+    legalCitation: 'Eighth Schedule to the Constitution of India & Census Rules 1990 §7',
+    officialAdvice: 'Choose your preferred regional language on the portal or request your enumerator for your regional schedule.',
+    tags: ['Languages', 'Eighth Schedule', 'Inclusivity', 'Regional'],
+  },
+  // 3. Verified Fact #3: Sovereign GIS Mapping
+  {
+    id: 'fact_sovereign_gis',
+    category: 'Privacy',
+    rumorClaim: 'Geo-spatial tagging of Census houses utilizes secured Indian Sovereign GIS (Bharat Maps) under NIC cryptographic standards.',
+    verdict: 'TRUE',
+    truthScore: 99,
+    shortVerdict: 'Official Fact: High-Security National GIS Infrastructure.',
+    detailedAnalysis: 'All house geolocation coordinates captured during self-enumeration or field visits are encrypted and anchored to the National Spatial Data Infrastructure (NSDI) hosted on National Informatics Centre (NIC) government servers with zero foreign cloud dependency.',
+    legalCitation: 'National Geospatial Policy 2022 & MeitY Cloud Security Standards',
+    officialAdvice: 'Your house geo-coordinates are used strictly to map administrative boundaries and disaster evacuation zones.',
+    tags: ['GIS', 'Bharat Maps', 'NIC', 'Encryption', 'Privacy'],
+  },
+  // 4. Verified Fact #4: AES-256 Vault Encryption
+  {
+    id: 'fact_aes_encryption',
+    category: 'Privacy',
+    rumorClaim: 'All digital census schedules submitted through mobile apps or portal are encrypted using end-to-end AES-256 military-grade encryption.',
+    verdict: 'TRUE',
+    truthScore: 100,
+    shortVerdict: 'Official Fact: End-to-End Cryptographic Protection.',
+    detailedAnalysis: 'Data captured on digital devices is encrypted at rest and in transit using SHA-256 and AES-256 ciphers. Once submitted, records cannot be viewed or decrypted by local field operators without centralized ORGI HSM cryptographic keys.',
+    legalCitation: 'Digital Personal Data Protection Act (DPDPA) 2023 & ORGI Cybersecurity Framework',
+    officialAdvice: 'Your data is secured against unauthorized interception at all stages of digital transmission.',
+    tags: ['AES-256', 'Encryption', 'Cybersecurity', 'DPDPA 2023'],
+  },
+  // 5. Verified Fact #5: Strict Secrecy Penalties for Officials
+  {
+    id: 'fact_officer_penalties',
+    category: 'Legal',
+    rumorClaim: 'Census enumerators or officers who leak or disclose citizen answers face mandatory imprisonment and criminal prosecution.',
+    verdict: 'TRUE',
+    truthScore: 100,
+    shortVerdict: 'Official Fact: Strict Penal Liability for Officials.',
+    detailedAnalysis: 'Under Section 11(1)(d) of the Census Act, 1948, any census officer who unlawfully discloses any information or copies any schedule without lawful authority shall be punishable with imprisonment up to 3 years and criminal fines.',
+    legalCitation: 'Census Act 1948, Section 11 (Penalties on Census Officers)',
+    officialAdvice: 'Every census worker operates under a legally binding oath of absolute statutory confidentiality.',
+    tags: ['Penalties', 'Officer Duty', 'Census Act §11', 'Secrecy'],
+  },
+  // 6. Rumor #1: Marketing Companies Selling Data
+  {
+    id: 'rumor_marketing_companies',
+    category: 'Privacy',
+    rumorClaim: 'Census datasets containing citizen names, phone numbers, and addresses will be sold to private marketing and insurance companies.',
+    verdict: 'FALSE',
+    truthScore: 0,
+    shortVerdict: 'Completely False: Commercial sale of census data is strictly illegal.',
+    detailedAnalysis: 'Under no circumstances is individual-level census data ever commercialized, sold, or shared with telecom, insurance, or advertising agencies. All published Census data is aggregated at ward, village, and district levels with all personally identifiable information (PII) stripped out.',
+    legalCitation: 'Census Act 1948 §15 & DPDPA 2023 Data Fiduciary Mandates',
+    officialAdvice: 'Ignore social media rumors claiming your personal contact information will be leaked or sold for telemarketing.',
+    tags: ['Marketing', 'Commercial', 'Privacy', 'False Rumor'],
+  },
+  // 7. Rumor #2: Outsourcing to Private Call Centers
+  {
+    id: 'rumor_private_contractors',
+    category: 'Operations',
+    rumorClaim: 'Census door-to-door enumeration is being outsourced to unverified private marketing agencies and third-party call centers.',
+    verdict: 'FALSE',
+    truthScore: 2,
+    shortVerdict: 'False: Enumeration is conducted exclusively by designated Public Servants.',
+    detailedAnalysis: 'Under Section 4 of the Census Act 1948, only government teachers, municipal staff, state revenue officers, and public servants are designated as official Census Enumerators. Every enumerator carries an official QR-coded ID card signed by the District Magistrate.',
+    legalCitation: 'Census Act 1948, Section 4 (Appointment of Census Officers)',
+    officialAdvice: 'Always verify the government identity badge and QR code of any enumerator visiting your home.',
+    tags: ['Enumerators', 'Public Servants', 'ID Card', 'Operations'],
+  },
+  // 8. Misleading Claim #1: Instant Cash Handouts
+  {
+    id: 'misleading_cash_benefits',
+    category: 'Operations',
+    rumorClaim: 'Completing Self-Enumeration immediately registers your family for instant ₹5,000 monthly cash deposits into your bank account.',
+    verdict: 'MISLEADING',
+    truthScore: 15,
+    shortVerdict: 'Misleading: Census data informs macro policy, not direct cash payouts.',
+    detailedAnalysis: 'While census data helps the government determine budget allocations and poverty indices for schemes like PMAY and Jal Jeevan Mission, filling out a census schedule does NOT automatically enroll you into direct cash transfer schemes without formal scheme application.',
+    legalCitation: 'Ministry of Finance Guidelines on Direct Benefit Transfers (DBT)',
+    officialAdvice: 'Participate in the census to build accurate national infrastructure data, but do not expect immediate monetary stipends.',
+    tags: ['Cash Scheme', 'Welfare', 'Misleading', 'DBT'],
+  },
+  // 9. Phishing Scam Alert #1: Fake APK Download Links
+  {
+    id: 'scam_fake_apk_links',
+    category: 'Fraud Prevention',
+    rumorClaim: 'SMS messages or WhatsApp forwards providing direct APK download links (e.g. "Census2027_Live.apk") for self-enumeration.',
+    verdict: 'SCAM_ALERT',
+    truthScore: 0,
+    shortVerdict: 'Malware Scam Alert: Never install APK files from SMS or WhatsApp.',
+    detailedAnalysis: 'Cyber fraudsters are circulating malicious Android APK files disguised as the official Census App to steal banking credentials, SMS OTPs, and personal contacts. The official Census 2027 app is hosted ONLY on the official portal (censusindia.gov.in) and Google Play Store.',
+    legalCitation: 'Indian Computer Emergency Response Team (CERT-In) Vulnerability Advisory',
+    officialAdvice: 'Only access the official web portal (censusindia.gov.in) or verified app store listings. Delete suspicious APK links immediately.',
+    tags: ['Malware', 'Fake APK', 'Phishing', 'Cyber Alert'],
+  },
+  // 10. Phishing Scam Alert #2: Early Bird Lottery SMS
+  {
+    id: 'scam_lottery_sms',
+    category: 'Fraud Prevention',
+    rumorClaim: 'SMS alerts claiming you have won a ₹1,00,000 "Census Early Registration Prize" requiring you to click a link to claim.',
+    verdict: 'SCAM_ALERT',
+    truthScore: 0,
+    shortVerdict: 'Financial Fraud Alert: Government never runs lotteries for Census.',
+    detailedAnalysis: 'ORGI and the Ministry of Home Affairs never organize cash lotteries, lucky draws, or promotional giveaways. Any message claiming financial rewards for census participation is an identity-theft phishing scam.',
+    legalCitation: 'Bharatiya Nyaya Sanhita 2023 §318 (Cheating) & IT Act 2000 §66D',
+    officialAdvice: 'Report fraudulent SMS numbers immediately to the National Cyber Crime Portal (cybercrime.gov.in) or dial 1930.',
+    tags: ['Lottery Scam', 'Financial Fraud', 'Cybercrime', 'Phishing'],
+  },
 ];

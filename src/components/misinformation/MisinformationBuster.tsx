@@ -20,7 +20,7 @@ import {
 export const MisinformationBuster: React.FC = () => {
   const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [selectedFilter, setSelectedFilter] = useState<string>('All');
   const [customRumorInput, setCustomRumorInput] = useState('');
   const [isScanning, setIsScanning] = useState(false);
   const [scannedResult, setScannedResult] = useState<{
@@ -33,16 +33,35 @@ export const MisinformationBuster: React.FC = () => {
 
   const [expandedRumorId, setExpandedRumorId] = useState<string | null>('rumor_tax_link');
 
-  const categories = ['All', 'Taxation', 'Privacy', 'Citizenship', 'Biometrics', 'Fraud Prevention', 'Legal'];
+  const filterTabs = [
+    'All',
+    'Verified Facts',
+    'False Rumors',
+    'Scam Alerts',
+    'Privacy',
+    'Taxation',
+    'Legal',
+    'Operations',
+  ];
 
   const filteredRumors = RUMORS_DATABASE.filter((r) => {
-    const matchesCategory = selectedCategory === 'All' || r.category === selectedCategory;
+    let matchesTab = true;
+    if (selectedFilter === 'Verified Facts') {
+      matchesTab = r.verdict === 'TRUE';
+    } else if (selectedFilter === 'False Rumors') {
+      matchesTab = r.verdict === 'FALSE' || r.verdict === 'MISLEADING';
+    } else if (selectedFilter === 'Scam Alerts') {
+      matchesTab = r.verdict === 'SCAM_ALERT';
+    } else if (selectedFilter !== 'All') {
+      matchesTab = r.category === selectedFilter;
+    }
+
     const matchesSearch =
       r.rumorClaim.toLowerCase().includes(searchQuery.toLowerCase()) ||
       r.shortVerdict.toLowerCase().includes(searchQuery.toLowerCase()) ||
       r.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    return matchesCategory && matchesSearch;
+    return matchesTab && matchesSearch;
   });
 
   const handleScanCustomRumor = () => {
@@ -58,24 +77,24 @@ export const MisinformationBuster: React.FC = () => {
         'Under Section 15 of the Census Act 1948, all personal census responses are strictly privileged, encrypted, and cannot be shared with tax authorities, police, or produced as court evidence.';
       let legalCitation = 'Census Act 1948 §15 & Digital Personal Data Protection Act 2023';
 
-      if (lower.includes('bank') || lower.includes('otp') || lower.includes('money') || lower.includes('prize') || lower.includes('subsidy')) {
+      if (lower.includes('bank') || lower.includes('otp') || lower.includes('money') || lower.includes('prize') || lower.includes('subsidy') || lower.includes('lottery') || lower.includes('apk')) {
         verdict = 'SCAM_ALERT';
         trustScore = 0;
         explanation =
-          'CRITICAL ALERT: Census 2027 never asks for Bank Account Numbers, Debit/Credit Card CVVs, UPI PINs, or Financial OTPs. This message is a fraudulent cyber phishing attempt.';
-        legalCitation = 'CERT-In / National Cyber Crime Portal Advisory';
+          'CRITICAL ALERT: Census 2027 never asks for Bank Account Numbers, Debit/Credit Card CVVs, UPI PINs, or Financial OTPs, nor distributes APKs via SMS. This is a fraudulent cyber phishing attempt.';
+        legalCitation = 'CERT-In / National Cyber Crime Portal Advisory & I4C';
       } else if (lower.includes('biometric') || lower.includes('fingerprint') || lower.includes('iris') || lower.includes('face')) {
         verdict = 'FALSE';
         trustScore = 0;
         explanation =
           'Census 2027 does NOT capture biometrics (fingerprints or iris). It is purely a mobile questionnaire demographic & housing survey.';
         legalCitation = 'ORGI Standard Operating Procedure 2026-27';
-      } else if (lower.includes('compulsory') || lower.includes('mandatory') || lower.includes('law')) {
+      } else if (lower.includes('compulsory') || lower.includes('mandatory') || lower.includes('law') || lower.includes('free') || lower.includes('language')) {
         verdict = 'TRUE';
-        trustScore = 98;
+        trustScore = 100;
         explanation =
-          'Truthful participation in the census is a statutory public duty under Section 8 of the Census Act 1948.';
-        legalCitation = 'Census Act 1948, Section 8';
+          'Truthful participation in the census is a statutory public duty under Section 8 of the Census Act 1948, completely free of charge, and supported in 22 scheduled languages.';
+        legalCitation = 'Census Act 1948, Section 8 & Constitution of India 8th Schedule';
       }
 
       setScannedResult({
@@ -86,7 +105,7 @@ export const MisinformationBuster: React.FC = () => {
         legalCitation,
       });
       setIsScanning(false);
-    }, 550);
+    }, 500);
   };
 
   const getVerdictBadge = (verdict: RumorFactItem['verdict']) => {
@@ -141,7 +160,7 @@ export const MisinformationBuster: React.FC = () => {
             <h2 style={{ fontSize: '1.5rem', color: '#ffffff' }}>AI Misinformation Buster & Privacy Verifier</h2>
           </div>
           <p style={{ fontSize: '0.875rem', color: '#94a3b8', maxWidth: '720px' }}>
-            Test viral rumors, WhatsApp forwards, or misconceptions regarding Census 2027 privacy, tax audits, NRC linking, and biometrics against official statutory laws.
+            Test viral rumors, WhatsApp forwards, or misconceptions regarding Census 2027 privacy, tax audits, NRC linking, biometrics, and fake scam links against official statutory laws.
           </p>
         </div>
 
@@ -172,7 +191,7 @@ export const MisinformationBuster: React.FC = () => {
           <h3 style={{ fontSize: '1.2rem' }}>Test Any Claim / WhatsApp Message</h3>
         </div>
         <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
-          Paste any forwarded text or question below to run real-time legal AI verification.
+          Paste any forwarded text, SMS claim, or query below to run real-time legal AI verification.
         </p>
 
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
@@ -251,7 +270,7 @@ export const MisinformationBuster: React.FC = () => {
         )}
       </div>
 
-      {/* Category Pills & Search */}
+      {/* Filter Tabs & Search */}
       <div
         className="glass-card"
         style={{
@@ -264,14 +283,14 @@ export const MisinformationBuster: React.FC = () => {
         }}
       >
         <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-          {categories.map((cat) => (
+          {filterTabs.map((tab) => (
             <button
-              key={cat}
-              className={`btn ${selectedCategory === cat ? 'btn-primary' : 'btn-outline'}`}
+              key={tab}
+              className={`btn ${selectedFilter === tab ? 'btn-primary' : 'btn-outline'}`}
               style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}
-              onClick={() => setSelectedCategory(cat)}
+              onClick={() => setSelectedFilter(tab)}
             >
-              {cat}
+              {tab}
             </button>
           ))}
         </div>

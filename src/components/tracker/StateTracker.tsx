@@ -9,9 +9,6 @@ import {
   Phone,
   UserCheck,
   ShieldCheck,
-  CheckCircle2,
-  AlertCircle,
-  ExternalLink,
   ChevronRight,
   Droplets,
   Sun,
@@ -75,27 +72,27 @@ export const StateTracker: React.FC<StateTrackerProps> = ({ onSelectStateForEnum
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <div
             style={{
-              background: 'rgba(16, 185, 129, 0.15)',
-              border: '1px solid rgba(16, 185, 129, 0.4)',
+              background: 'rgba(19, 136, 8, 0.18)',
+              border: '1px solid rgba(19, 136, 8, 0.45)',
               padding: '0.75rem 1.25rem',
               borderRadius: 'var(--radius-sm)',
               textAlign: 'center',
             }}
           >
-            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#34d399' }}>{activeCount} States</div>
+            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#4ade80' }}>{activeCount} States & UTs</div>
             <div style={{ fontSize: '0.75rem', color: '#cbd5e1' }}>15-Day Self-Enum Window Open</div>
           </div>
 
           <div
             style={{
-              background: 'rgba(245, 158, 11, 0.15)',
-              border: '1px solid rgba(245, 158, 11, 0.4)',
+              background: 'rgba(245, 158, 11, 0.18)',
+              border: '1px solid rgba(245, 158, 11, 0.45)',
               padding: '0.75rem 1.25rem',
               borderRadius: 'var(--radius-sm)',
               textAlign: 'center',
             }}
           >
-            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#fbbf24' }}>{upcomingCount} States</div>
+            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#fbbf24' }}>{upcomingCount} States & UTs</div>
             <div style={{ fontSize: '0.75rem', color: '#cbd5e1' }}>Upcoming Phase Schedule</div>
           </div>
         </div>
@@ -135,7 +132,7 @@ export const StateTracker: React.FC<StateTrackerProps> = ({ onSelectStateForEnum
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search state, UT, capital or state code (e.g. UP, MH, Delhi)..."
+            placeholder="Search state, UT, capital or state code (e.g. UP, MH, CG, Delhi)..."
             style={{
               width: '100%',
               padding: '0.65rem 1rem 0.65rem 2.5rem',
@@ -175,11 +172,11 @@ export const StateTracker: React.FC<StateTrackerProps> = ({ onSelectStateForEnum
         </div>
       </div>
 
-      {/* State Grid Cards */}
+      {/* 3x3 State Grid Cards Layout */}
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))',
           gap: '1.25rem',
         }}
       >
@@ -194,7 +191,7 @@ export const StateTracker: React.FC<StateTrackerProps> = ({ onSelectStateForEnum
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                borderLeft: `4px solid ${isActive ? '#10b981' : '#f59e0b'}`,
+                borderLeft: `4px solid ${isActive ? '#138808' : '#f59e0b'}`,
               }}
             >
               <div>
@@ -247,7 +244,7 @@ export const StateTracker: React.FC<StateTrackerProps> = ({ onSelectStateForEnum
                     <span style={{ color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
                       <Clock size={13} color="var(--saffron-500)" /> 15-Day Pre-Survey:
                     </span>
-                    <strong style={{ color: isActive ? '#059669' : 'var(--text-primary)' }}>
+                    <strong style={{ color: isActive ? '#0d6506' : 'var(--text-primary)' }}>
                       {st.selfEnumWindowStart} to {st.selfEnumWindowEnd}
                     </strong>
                   </div>
@@ -270,19 +267,19 @@ export const StateTracker: React.FC<StateTrackerProps> = ({ onSelectStateForEnum
                 {/* Progress Indicators */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', fontSize: '0.78rem', marginBottom: '1rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                    <Droplets size={13} color="#06b6d4" />
+                    <Droplets size={13} color="#0284c7" />
                     <span>Jal Jeevan: <strong>{st.jalJeevanCoveragePct}%</strong></span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                    <Sun size={13} color="#f59e0b" />
+                    <Sun size={13} color="#d97706" />
                     <span>Solar: <strong>{st.pmSuryaGharSolarPct}%</strong></span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                    <Home size={13} color="#10b981" />
+                    <Home size={13} color="#138808" />
                     <span>Pucca: <strong>{st.puccaHousingPct}%</strong></span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                    <BookOpen size={13} color="#8b5cf6" />
+                    <BookOpen size={13} color="#7c3aed" />
                     <span>Literacy: <strong>{st.literacyRatePct}%</strong></span>
                   </div>
                 </div>
@@ -331,11 +328,13 @@ export const StateTracker: React.FC<StateTrackerProps> = ({ onSelectStateForEnum
           <div
             className="glass-card"
             style={{
-              maxWidth: '600px',
+              maxWidth: '620px',
               width: '100%',
               padding: '2rem',
               background: 'var(--bg-secondary)',
               position: 'relative',
+              maxHeight: '90vh',
+              overflowY: 'auto',
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -343,11 +342,11 @@ export const StateTracker: React.FC<StateTrackerProps> = ({ onSelectStateForEnum
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
               <div>
                 <span className="status-badge status-active" style={{ marginBottom: '0.4rem' }}>
-                  Official Directorate Record
+                  ORGI Directorate Record
                 </span>
                 <h2 style={{ fontSize: '1.6rem' }}>{activeModalState.name} ({activeModalState.code})</h2>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                  Capital: {activeModalState.capital} • State Type: {activeModalState.type}
+                  Capital: {activeModalState.capital} • Entity: {activeModalState.type}
                 </p>
               </div>
 
@@ -387,6 +386,29 @@ export const StateTracker: React.FC<StateTrackerProps> = ({ onSelectStateForEnum
               </div>
             </div>
 
+            {/* Districts List Chips */}
+            <div style={{ marginBottom: '1.25rem' }}>
+              <div style={{ fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.4rem', color: 'var(--text-secondary)' }}>
+                Districts in {activeModalState.name} ({activeModalState.districtsCount} Total):
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', maxHeight: '120px', overflowY: 'auto' }}>
+                {activeModalState.districtsList.map((dist, idx) => (
+                  <span
+                    key={idx}
+                    style={{
+                      fontSize: '0.75rem',
+                      padding: '0.2rem 0.5rem',
+                      background: 'var(--bg-tertiary)',
+                      borderRadius: '4px',
+                      border: '1px solid var(--border-subtle)',
+                    }}
+                  >
+                    {dist}
+                  </span>
+                ))}
+              </div>
+            </div>
+
             {/* Officer & Helpline Details */}
             <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '1.25rem', marginBottom: '1.5rem', fontSize: '0.875rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
@@ -394,7 +416,7 @@ export const StateTracker: React.FC<StateTrackerProps> = ({ onSelectStateForEnum
                 <span>Nodal Officer: <strong>{activeModalState.nodalOfficer}</strong></span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Phone size={16} color="#10b981" />
+                <Phone size={16} color="#138808" />
                 <span>State Census Control Room: <strong>{activeModalState.activeHelpline}</strong></span>
               </div>
             </div>

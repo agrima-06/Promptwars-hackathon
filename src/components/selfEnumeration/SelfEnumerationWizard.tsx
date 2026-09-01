@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { useLanguage } from '../../context/LanguageContext';
 import { STATES_DATA } from '../../data/statesData';
-import { PHASE_1_QUESTIONS, PHASE_2_QUESTIONS } from '../../data/censusQuestions';
 import {
   generateOfficialSeId,
   getStoredSeId,
@@ -50,8 +49,19 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
   const [privacyAgreed, setPrivacyAgreed] = useState(true);
 
   const [selectedStateCode, setSelectedStateCode] = useState(initialStateCode || 'UP');
-  const [districtName, setDistrictName] = useState('Lucknow');
+  
+  // Find matched state
+  const currentStateObj = STATES_DATA.find((s) => s.code === selectedStateCode) || STATES_DATA[0];
+  const [districtName, setDistrictName] = useState(currentStateObj.districtsList[0] || 'Lucknow');
   const [pincode, setPincode] = useState('226001');
+
+  // Update district when state changes
+  useEffect(() => {
+    const sObj = STATES_DATA.find((s) => s.code === selectedStateCode);
+    if (sObj && sObj.districtsList.length > 0) {
+      setDistrictName(sObj.districtsList[0]);
+    }
+  }, [selectedStateCode]);
 
   // Phase 1 values
   const [houseStructure, setHouseStructure] = useState('pucca_concrete');
@@ -232,12 +242,12 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
                   background: isCurrent
                     ? 'var(--navy-800)'
                     : isCompleted
-                    ? 'rgba(16, 185, 129, 0.15)'
+                    ? 'rgba(19, 136, 8, 0.15)'
                     : 'var(--bg-tertiary)',
                   color: isCurrent
                     ? '#ffffff'
                     : isCompleted
-                    ? '#059669'
+                    ? '#0d6506'
                     : 'var(--text-muted)',
                   fontSize: '0.8rem',
                   fontWeight: 700,
@@ -252,19 +262,19 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
         </div>
       </div>
 
-      {/* STEP 1: Verification & Mobile */}
+      {/* STEP 1: Verification & Mobile with Cascading District Select */}
       {currentStep === 1 && (
         <div className="glass-card" style={{ padding: '2rem' }}>
-          <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Step 1: Citizen Mobile Verification & State Selection</h3>
+          <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Step 1: Citizen Mobile Verification & Location Selection</h3>
           <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
-            Enter your mobile number to receive your electronic Self-Enumeration ID and digital acknowledgment pass.
+            Select your State/UT and District from the official ORGI registry and verify your mobile number.
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
-            {/* State Select */}
+            {/* State Select (All 36 States & UTs) */}
             <div>
               <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>
-                State / Union Territory
+                State / Union Territory (36 Total)
               </label>
               <select
                 value={selectedStateCode}
@@ -281,22 +291,20 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
               >
                 {STATES_DATA.map((s) => (
                   <option key={s.code} value={s.code}>
-                    {s.name} ({s.code}) - {s.status === 'active' ? '🟢 Window Open' : '🟡 Upcoming'}
+                    {s.name} ({s.code}) - {s.type}
                   </option>
                 ))}
               </select>
             </div>
 
-            {/* District */}
+            {/* Cascading District Dropdown */}
             <div>
               <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>
-                District Name
+                District in {currentStateObj.name} ({currentStateObj.districtsCount} Districts)
               </label>
-              <input
-                type="text"
+              <select
                 value={districtName}
                 onChange={(e) => setDistrictName(e.target.value)}
-                placeholder="e.g. Lucknow, Pune, Chennai"
                 style={{
                   width: '100%',
                   padding: '0.75rem',
@@ -304,14 +312,21 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
                   border: '1px solid var(--border-subtle)',
                   background: 'var(--bg-tertiary)',
                   color: 'var(--text-primary)',
+                  fontSize: '0.9rem',
                 }}
-              />
+              >
+                {currentStateObj.districtsList.map((dist, idx) => (
+                  <option key={idx} value={dist}>
+                    {dist}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Mobile Number */}
             <div>
               <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>
-                Mobile Number (for SMS & SE ID)
+                Mobile Number (for SMS & SE ID Pass)
               </label>
               <div style={{ position: 'relative' }}>
                 <input
@@ -541,12 +556,12 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
                     style={{
                       padding: '0.65rem 0.85rem',
                       borderRadius: 'var(--radius-sm)',
-                      background: checked ? 'rgba(16, 185, 129, 0.15)' : 'var(--bg-tertiary)',
-                      border: checked ? '1px solid #10b981' : '1px solid var(--border-subtle)',
+                      background: checked ? 'rgba(19, 136, 8, 0.15)' : 'var(--bg-tertiary)',
+                      border: checked ? '1px solid #138808' : '1px solid var(--border-subtle)',
                       cursor: 'pointer',
                       fontSize: '0.85rem',
                       fontWeight: checked ? 700 : 500,
-                      color: checked ? '#059669' : 'var(--text-primary)',
+                      color: checked ? '#0d6506' : 'var(--text-primary)',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '0.5rem',
@@ -649,6 +664,8 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
                 <option value="Urdu">Urdu (اردو)</option>
                 <option value="Punjabi">Punjabi (ਪੰਜਾਬੀ)</option>
                 <option value="Malayalam">Malayalam (മലയാളം)</option>
+                <option value="Odia">Odia (ଓଡ଼ିଆ)</option>
+                <option value="Assamese">Assamese (অসমীয়া)</option>
               </select>
             </div>
 
@@ -789,7 +806,7 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
               <span
                 style={{
                   background: 'rgba(0, 0, 0, 0.75)',
-                  color: '#10b981',
+                  color: '#138808',
                   padding: '0.35rem 0.75rem',
                   borderRadius: 'var(--radius-sm)',
                   fontSize: '0.8rem',
@@ -827,7 +844,7 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
                   whiteSpace: 'nowrap',
                 }}
               >
-                Structure ID: #{selectedStateCode}-{districtName.slice(0, 3).toUpperCase()}
+                Structure: {districtName} ({selectedStateCode})
               </div>
               <MapPin size={42} color="#f43f5e" fill="#f43f5e" style={{ filter: 'drop-shadow(0 4px 12px rgba(244, 63, 94, 0.7))' }} />
               <div
@@ -861,11 +878,11 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
               </div>
               <div>
                 <span>Longitude: </span>
-                <strong style={{ color: '#34d399' }}>{lng.toFixed(5)}° E</strong>
+                <strong style={{ color: '#4ade80' }}>{lng.toFixed(5)}° E</strong>
               </div>
               <div>
-                <span>District: </span>
-                <strong>{districtName} ({selectedStateCode})</strong>
+                <span>Location: </span>
+                <strong>{districtName}, {currentStateObj.name}</strong>
               </div>
             </div>
           </div>
@@ -892,8 +909,8 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
             className="glass-card"
             style={{
               padding: '1.5rem',
-              background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.1) 100%)',
-              border: '1px solid #10b981',
+              background: 'linear-gradient(135deg, rgba(19, 136, 8, 0.15) 0%, rgba(13, 101, 6, 0.08) 100%)',
+              border: '1px solid #138808',
               borderRadius: 'var(--radius-md)',
               display: 'flex',
               alignItems: 'center',
@@ -908,7 +925,7 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
                   width: '48px',
                   height: '48px',
                   borderRadius: '50%',
-                  background: '#10b981',
+                  background: '#138808',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -918,7 +935,7 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
                 <CheckCircle2 size={28} />
               </div>
               <div>
-                <h3 style={{ fontSize: '1.3rem', color: '#059669' }}>
+                <h3 style={{ fontSize: '1.3rem', color: '#0d6506' }}>
                   {t('seIdSuccess')}
                 </h3>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -980,15 +997,15 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
               {/* Status Stamp */}
               <div
                 style={{
-                  border: '2px dashed #10b981',
+                  border: '2px dashed #138808',
                   padding: '0.4rem 0.85rem',
                   borderRadius: '6px',
                   textAlign: 'center',
-                  background: 'rgba(16, 185, 129, 0.1)',
+                  background: 'rgba(19, 136, 8, 0.1)',
                 }}
               >
-                <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#059669' }}>ORGI VERIFIED</div>
-                <div style={{ fontSize: '0.85rem', fontWeight: 900, color: '#059669' }}>PRE-ENUMERATED</div>
+                <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#0d6506' }}>ORGI VERIFIED</div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 900, color: '#0d6506' }}>PRE-ENUMERATED</div>
               </div>
             </div>
 
@@ -1072,7 +1089,7 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
                     marginBottom: '0.75rem',
                   }}
                 >
-                  <QrCode size={110} color="#0f172a" />
+                  <QrCode size={110} color="#0a1931" />
                 </div>
                 <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--navy-800)' }}>
                   SCAN FOR FIELD ENUMERATOR VALIDATION
