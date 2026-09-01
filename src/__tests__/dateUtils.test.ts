@@ -15,7 +15,7 @@ describe('Census Date Formatting Utilities', () => {
 
   it('formats date ranges cleanly', () => {
     expect(formatCensusDateRange('2026-04-15', '2026-04-30')).toBe('15 Apr 2026 to 30 Apr 2026');
-    expect(formatCensusDateRange('2026-04-15', '2026-04-30', true)).toBe('15Apr26 - 30Apr26');
+    expect(formatCensusDateRange('2026-04-15', '2026-04-30', true)).toBe('15Apr26 to 30Apr26');
   });
 
   it('gracefully handles missing or invalid inputs', () => {

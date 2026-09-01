@@ -65,7 +65,7 @@ describe('LanguageContext & Multi-lingual Localization', () => {
     // Switch to Tamil
     fireEvent.click(screen.getByTestId('btn-lang-ta'));
     expect(screen.getByTestId('current-lang')).toHaveTextContent('ta');
-    expect(screen.getByTestId('portal-title')).toHaveTextContent('மக்கள் தொகை கணக்கெடுப்பு 2027: டிஜிட்டல் கணக்கீடு');
+    expect(screen.getByTestId('portal-title')).toHaveTextContent('மக்கள்தொகை கணக்கெடுப்பு 2027: டிஜிட்டல் கணக்கெடுப்பு');
   });
 
   it('persists selected language in localStorage and syncs document.documentElement.lang', () => {

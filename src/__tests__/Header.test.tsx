@@ -50,10 +50,10 @@ describe('Header & Navigation Component', () => {
     fireEvent.click(langBtn);
 
     expect(screen.getByText('Select Language (भाषा)')).toBeInTheDocument();
-    expect(screen.getByText('हिन्दी (Hindi)')).toBeInTheDocument();
+    expect(screen.getByText('हिन्दी')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText('हिन्दी (Hindi)'));
+    fireEvent.click(screen.getByText('हिन्दी'));
     // Header should now reflect Hindi strings
-    expect(screen.getByText('संवाद AI')).toBeInTheDocument();
+    expect(screen.getByText('एआई सलाहकार')).toBeInTheDocument();
   });
 });
