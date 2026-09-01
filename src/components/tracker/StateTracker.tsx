@@ -1,3 +1,10 @@
+/**
+ * @file StateTracker.tsx
+ * @description Dynamic Enumeration Rollout Tracker for all 36 States & Union Territories of India.
+ * Visualizes authentic ORGI 15-day pre-survey windows, Phase I and Phase II fieldwork schedules,
+ * text-based date ranges, live status filters, and district inspection modals for Paperless Governance.
+ */
+
 import React, { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { STATES_DATA, StateCensusData } from '../../data/statesData';
@@ -18,9 +25,15 @@ import {
 } from 'lucide-react';
 
 interface StateTrackerProps {
+  /** Optional callback to pre-select state and launch Self-Enumeration Wizard */
   onSelectStateForEnum?: (stateCode: string) => void;
 }
 
+/**
+ * StateTracker Component - Renders national state rollout grid with search and detail modals.
+ * @param {StateTrackerProps} props - Component properties.
+ * @returns {React.ReactElement} Rendered StateTracker interface.
+ */
 export const StateTracker: React.FC<StateTrackerProps> = ({ onSelectStateForEnum }) => {
   const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');

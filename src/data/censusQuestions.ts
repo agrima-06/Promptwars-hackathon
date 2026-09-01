@@ -14,7 +14,7 @@ export interface CensusQuestion {
   description: string;
   type: 'select' | 'radio' | 'multiselect' | 'text' | 'number';
   options?: QuestionOption[];
-  defaultValue?: any;
+  defaultValue?: string | number | string[];
   placeholder?: string;
   helperNote?: string;
 }

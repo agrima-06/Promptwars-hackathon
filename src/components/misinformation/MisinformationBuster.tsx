@@ -1,3 +1,11 @@
+/**
+ * @file MisinformationBuster.tsx
+ * @description Real-time AI Rumor Buster and Statutory Privacy Verifier.
+ * Grounded in Section 15 of the Census Act 1948 and DPDPA 2023.
+ * Evaluates viral claims, WhatsApp forwards, phishing scam messages, and tax misconceptions
+ * with an AI Truth Score (0-100%) and official statutory citations.
+ */
+
 import React, { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { RUMORS_DATABASE, RumorFactItem } from '../../data/rumorsData';
@@ -17,6 +25,10 @@ import {
   HelpCircle,
 } from 'lucide-react';
 
+/**
+ * MisinformationBuster Component - AI Claim Scanner and Fact Verification Matrix.
+ * @returns {React.ReactElement} Rendered MisinformationBuster interface.
+ */
 export const MisinformationBuster: React.FC = () => {
   const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');

@@ -1,14 +1,33 @@
+/**
+ * @file policyCalculator.ts
+ * @description Macro-economic simulation engine for demographic shift budget projections.
+ * Calculates dynamic budget allocations across major central flagship schemes (PMAY, JJM,
+ * PM Surya Ghar, Ujjwala, Digital India) alongside HDI scores, green jobs, and CO2 reduction.
+ */
+
 import { POLICY_SCHEMES_CONFIG } from '../data/dashboardData';
 
+/**
+ * Input levers for demographic scenario simulation.
+ */
 export interface PolicySimulatorInputs {
-  puccaHousingTargetPct: number; // 60% to 100%
-  tapWaterTargetPct: number; // 60% to 100%
-  rooftopSolarTargetPct: number; // 10% to 90%
-  cleanCookingTargetPct: number; // 70% to 100%
-  digitalLiteracyTargetPct: number; // 50% to 100%
-  urbanizationPct: number; // 30% to 65%
+  /** Target percentage for concrete Pucca housing (60% to 100%) */
+  puccaHousingTargetPct: number;
+  /** Target percentage for Jal Jeevan treated piped tap water (60% to 100%) */
+  tapWaterTargetPct: number;
+  /** Target percentage for rooftop solar penetration (10% to 90%) */
+  rooftopSolarTargetPct: number;
+  /** Target percentage for clean LPG/PNG cooking fuel (70% to 100%) */
+  cleanCookingTargetPct: number;
+  /** Target percentage for rural digital & UPI literacy (50% to 100%) */
+  digitalLiteracyTargetPct: number;
+  /** Projected national urbanization level (30% to 65%) */
+  urbanizationPct: number;
 }
 
+/**
+ * Projected outcome for an individual central flagship scheme.
+ */
 export interface SchemeProjectionResult {
   schemeName: string;
   ministry: string;
@@ -19,6 +38,9 @@ export interface SchemeProjectionResult {
   highlightInsight: string;
 }
 
+/**
+ * Composite output containing total budget outlays, HDI scores, and ecological metrics.
+ */
 export interface PolicySimulatorOutput {
   totalBudgetCr: number;
   baseTotalBudgetCr: number;
@@ -38,6 +60,11 @@ export const DEFAULT_SIMULATOR_INPUTS: PolicySimulatorInputs = {
   urbanizationPct: 38,
 };
 
+/**
+ * Calculates national welfare budget reallocation and socio-economic indicators.
+ * @param {PolicySimulatorInputs} inputs - Dynamic slider parameters.
+ * @returns {PolicySimulatorOutput} Modeled fiscal projections and HDI outputs.
+ */
 export const calculatePolicyImpact = (inputs: PolicySimulatorInputs): PolicySimulatorOutput => {
   const totalHouseholdsMillions = 335; // National households projected for 2027
 

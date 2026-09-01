@@ -1,3 +1,11 @@
+/**
+ * @file GenAIChatbot.tsx
+ * @description Official GenAI Conversational Concierge (Samvaad 2027) for India's 1st Fully Digital Census.
+ * Grounded in ORGI protocols and Section 15 of the Census Act 1948.
+ * Facilitates active Citizen Engagement (Jan Bhagidari), real-time speech-to-text,
+ * multi-lingual audio read-aloud, and automated guidance for Phase 1 & 2 enumeration.
+ */
+
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAccessibility } from '../../context/AccessibilityContext';
@@ -6,7 +14,7 @@ import {
   INITIAL_CONCIERGE_MESSAGES,
   generateConciergeResponse,
 } from '../../utils/aiConciergeEngine';
-import { createSpeechRecognizer } from '../../utils/speechUtils';
+import { createSpeechRecognizer, SpeechRecognitionHelper } from '../../utils/speechUtils';
 import {
   Send,
   Mic,
@@ -24,10 +32,17 @@ import {
 } from 'lucide-react';
 
 interface GenAIChatbotProps {
+  /** Optional callback to navigate to Self-Enumeration Wizard */
   onNavigateToSelfEnum?: () => void;
+  /** Optional callback to navigate to State Tracker */
   onNavigateToTracker?: (stateCode?: string) => void;
 }
 
+/**
+ * GenAIChatbot Component - Statutory AI Concierge for citizen queries and enumeration guidance.
+ * @param {GenAIChatbotProps} props - Component properties.
+ * @returns {React.ReactElement} Rendered GenAI Chatbot interface.
+ */
 export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
   onNavigateToSelfEnum,
   onNavigateToTracker,
@@ -45,7 +60,7 @@ export const GenAIChatbot: React.FC<GenAIChatbotProps> = ({
   const [filterPhase, setFilterPhase] = useState<'All' | 'Phase 1' | 'Phase 2' | 'Legal'>('All');
 
   const chatMessagesRef = useRef<HTMLDivElement>(null);
-  const speechRecognizerRef = useRef<any>(null);
+  const speechRecognizerRef = useRef<SpeechRecognitionHelper | null>(null);
 
   // Sync initial welcome message when user switches global language
   useEffect(() => {

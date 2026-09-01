@@ -1,3 +1,11 @@
+/**
+ * @file Header.tsx
+ * @description Primary national navigation header for JanData (Census 2027).
+ * Features official tri-color branding, three-line stacked government subtitle,
+ * interactive 8-language localization dropdown, accessibility font scaling (A-/A/A+),
+ * Web Speech API text-to-speech narration, and Digital India Initiative badges.
+ */
+
 import React, { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAccessibility } from '../../context/AccessibilityContext';
@@ -24,10 +32,17 @@ export type ActiveTab =
   | 'simulator';
 
 interface HeaderProps {
+  /** Currently active navigation tab */
   activeTab: ActiveTab;
+  /** State updater callback to switch active navigation tab */
   setActiveTab: (tab: ActiveTab) => void;
 }
 
+/**
+ * Top-level application header with statutory branding, language selection, and accessibility tools.
+ * @param {HeaderProps} props - Header component properties.
+ * @returns {React.ReactElement} Rendered Header component.
+ */
 export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
   const { currentLanguage, setLanguage, languages, t } = useLanguage();
   const {

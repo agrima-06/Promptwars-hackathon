@@ -1,3 +1,11 @@
+/**
+ * @file PolicySandbox.tsx
+ * @description Interactive Demographic & Flagship Welfare Budget Allocation Sandbox.
+ * Enables policymakers and citizens to dynamically model how shifts in census parameters
+ * (pucca housing, piped tap water, PM Surya Ghar solar, clean cooking fuel, and digital skills)
+ * trigger budgetary allocations across central flagship schemes for Data-Driven Policy Making.
+ */
+
 import React, { useState, useMemo } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import {
@@ -23,6 +31,10 @@ import {
   ArrowDownRight,
 } from 'lucide-react';
 
+/**
+ * PolicySandbox Component - Real-time policy simulator with interactive levers and budget modelers.
+ * @returns {React.ReactElement} Rendered PolicySandbox interface.
+ */
 export const PolicySandbox: React.FC = () => {
   const { t } = useLanguage();
   const [inputs, setInputs] = useState<PolicySimulatorInputs>(DEFAULT_SIMULATOR_INPUTS);

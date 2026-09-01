@@ -1,3 +1,13 @@
+/**
+ * @file seIdGenerator.ts
+ * @description Official Mock Self-Enumeration ID (SE ID) generation algorithm.
+ * Generates unique identifiers (IND-2027-[STATE]-[DIST]-XXXXXX) with cryptographic SHA-256
+ * integrity hashes, encrypted QR payloads, and 4-digit enumerator validation codes.
+ */
+
+/**
+ * Payload interface containing collected Phase 1 and Phase 2 enumeration parameters.
+ */
 export interface SelfEnumerationPayload {
   stateCode: string;
   stateName: string;
@@ -18,6 +28,9 @@ export interface SelfEnumerationPayload {
   lng: number;
 }
 
+/**
+ * Generated record containing SE ID certificate artifacts.
+ */
 export interface GeneratedSeIdRecord {
   seId: string;
   submissionTimestamp: string;
@@ -27,6 +40,11 @@ export interface GeneratedSeIdRecord {
   payload: SelfEnumerationPayload;
 }
 
+/**
+ * Generates a unique, standardized Self-Enumeration ID record with encrypted QR payload.
+ * @param {SelfEnumerationPayload} payload - Citizen response data.
+ * @returns {GeneratedSeIdRecord} Generated certificate record.
+ */
 export const generateOfficialSeId = (payload: SelfEnumerationPayload): GeneratedSeIdRecord => {
   const timestamp = new Date().toISOString();
   const randomSuffix = Math.floor(100000 + Math.random() * 900000);

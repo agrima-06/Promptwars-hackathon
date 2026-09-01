@@ -1,3 +1,11 @@
+/**
+ * @file SelfEnumerationWizard.tsx
+ * @description 4-step Citizen Self-Enumeration portal conforming to ORGI specifications.
+ * Implements mobile OTP verification, 31 Phase I housing parameters, Phase II demographics,
+ * sovereign GIS map geolocation tagging, and automated Mock SE ID certificate issuance
+ * protected under Section 15 of the Census Act, 1948.
+ */
+
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { useLanguage } from '../../context/LanguageContext';
@@ -30,10 +38,17 @@ import {
 } from 'lucide-react';
 
 interface SelfEnumerationWizardProps {
+  /** Optional pre-selected State / UT code (e.g. 'UP', 'MH') */
   initialStateCode?: string;
+  /** Optional completion callback */
   onDone?: () => void;
 }
 
+/**
+ * SelfEnumerationWizard Component - Renders the end-to-end self-enumeration workflow.
+ * @param {SelfEnumerationWizardProps} props - Wizard component properties.
+ * @returns {React.ReactElement} Rendered Self-Enumeration Wizard.
+ */
 export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
   initialStateCode,
 }) => {
@@ -98,7 +113,7 @@ export const SelfEnumerationWizard: React.FC<SelfEnumerationWizardProps> = ({
   // Voice Form Helper
   const [activeVoiceField, setActiveVoiceField] = useState<string | null>(null);
 
-  const handleVoiceInputForField = (fieldName: string, setter: (val: any) => void) => {
+  const handleVoiceInputForField = (fieldName: string, setter: (val: string) => void) => {
     setActiveVoiceField(fieldName);
     const recognizer = createSpeechRecognizer(currentLanguage);
     recognizer.start(

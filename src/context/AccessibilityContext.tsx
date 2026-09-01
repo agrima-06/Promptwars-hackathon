@@ -1,3 +1,10 @@
+/**
+ * @file AccessibilityContext.tsx
+ * @description Global state provider for digital accessibility & inclusive citizen tooling.
+ * Controls dynamic font scaling (sm/md/lg/xl), high-contrast modes, theme switching,
+ * and Web Speech API regional text-to-speech audio narration.
+ */
+
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useLanguage } from './LanguageContext';
 import { speakText, stopSpeaking } from '../utils/speechUtils';
@@ -6,7 +13,7 @@ export type FontScale = 'sm' | 'md' | 'lg' | 'xl';
 export type ThemeMode = 'light' | 'dark';
 export type ContrastMode = 'normal' | 'high';
 
-interface AccessibilityContextType {
+export interface AccessibilityContextType {
   fontScale: FontScale;
   setFontScale: (scale: FontScale) => void;
   increaseFontSize: () => void;
@@ -23,6 +30,11 @@ interface AccessibilityContextType {
 
 const AccessibilityContext = createContext<AccessibilityContextType | undefined>(undefined);
 
+/**
+ * AccessibilityProvider Component - Injects font scaling, contrast, and voice reader state.
+ * @param {{ children: React.ReactNode }} props - Provider properties.
+ * @returns {React.ReactElement} AccessibilityContext provider element.
+ */
 export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { currentLanguage } = useLanguage();
 

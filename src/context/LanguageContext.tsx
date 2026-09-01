@@ -1,15 +1,30 @@
+/**
+ * @file LanguageContext.tsx
+ * @description Global state provider for multi-lingual localization across 8 Indian languages.
+ * Synchronizes selected locale with localStorage, HTML lang attribute, and translation dictionaries.
+ */
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { LanguageCode, LANGUAGES, TRANSLATIONS, LanguageOption } from '../data/translations';
 
-interface LanguageContextType {
+export interface LanguageContextType {
+  /** Currently active ISO language code */
   currentLanguage: LanguageCode;
+  /** Function to update current active language */
   setLanguage: (lang: LanguageCode) => void;
+  /** List of all supported language options with native names and flags */
   languages: LanguageOption[];
+  /** Translation lookup helper function */
   t: (key: string) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+/**
+ * LanguageProvider Component - Wraps application to inject multi-lingual context.
+ * @param {{ children: React.ReactNode }} props - Provider properties.
+ * @returns {React.ReactElement} LanguageContext provider element.
+ */
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentLanguage, setCurrentLanguage] = useState<LanguageCode>(() => {
     const saved = localStorage.getItem('census_lang');

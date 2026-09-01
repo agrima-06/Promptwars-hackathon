@@ -135,11 +135,33 @@ export const stopSpeaking = () => {
   }
 };
 
-// Speech to Text (Recognition)
 export interface SpeechRecognitionHelper {
-  start: (onResult: (transcript: string) => void, onError?: (err: any) => void) => void;
+  start: (onResult: (transcript: string) => void, onError?: (err: string | Error) => void) => void;
   stop: () => void;
   isSupported: boolean;
+}
+
+interface SpeechRecognitionResultItem {
+  transcript: string;
+  confidence: number;
+}
+
+interface SpeechRecognitionResultEvent {
+  results: {
+    [index: number]: {
+      [index: number]: SpeechRecognitionResultItem;
+    };
+  };
+}
+
+interface SpeechRecognitionErrorEventPayload {
+  error: string;
+  message?: string;
+}
+
+interface IWindowWithSpeech extends Window {
+  SpeechRecognition?: new () => any;
+  webkitSpeechRecognition?: new () => any;
 }
 
 export const createSpeechRecognizer = (lang: LanguageCode = 'en'): SpeechRecognitionHelper => {
@@ -147,10 +169,10 @@ export const createSpeechRecognizer = (lang: LanguageCode = 'en'): SpeechRecogni
     return { start: () => {}, stop: () => {}, isSupported: false };
   }
 
-  const SpeechRecognition =
-    (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+  const win = window as IWindowWithSpeech;
+  const SpeechRecognitionConstructor = win.SpeechRecognition || win.webkitSpeechRecognition;
 
-  if (!SpeechRecognition) {
+  if (!SpeechRecognitionConstructor) {
     return {
       start: () => console.warn('Speech recognition not supported in this browser.'),
       stop: () => {},
@@ -158,7 +180,7 @@ export const createSpeechRecognizer = (lang: LanguageCode = 'en'): SpeechRecogni
     };
   }
 
-  const recognition = new SpeechRecognition();
+  const recognition = new SpeechRecognitionConstructor();
   recognition.continuous = false;
   recognition.interimResults = false;
   recognition.lang = SPEECH_LANG_MAP[lang] || 'en-IN';
@@ -167,16 +189,16 @@ export const createSpeechRecognizer = (lang: LanguageCode = 'en'): SpeechRecogni
 
   return {
     isSupported: true,
-    start: (onResult: (transcript: string) => void, onError?: (err: any) => void) => {
+    start: (onResult: (transcript: string) => void, onError?: (err: string | Error) => void) => {
       if (active) return;
       active = true;
 
-      recognition.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
+      recognition.onresult = (event: SpeechRecognitionResultEvent) => {
+        const transcript = event.results[0][0]?.transcript || '';
         onResult(transcript);
       };
 
-      recognition.onerror = (event: any) => {
+      recognition.onerror = (event: SpeechRecognitionErrorEventPayload) => {
         console.warn('Speech recognition error event:', event.error);
         if (onError) onError(event.error);
         active = false;

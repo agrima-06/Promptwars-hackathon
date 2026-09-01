@@ -1,3 +1,10 @@
+/**
+ * @file InsightsDashboard.tsx
+ * @description Smart Data Insights & Macro Trends Dashboard for Census 2027.
+ * Visualizes India's socio-economic leap across housing materials, Jal Jeevan tap water,
+ * clean energy, and digital inclusion (2011 to 2027) enabling Data-Driven Policy Making.
+ */
+
 import React, { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import {
@@ -20,6 +27,10 @@ import {
   Filter,
 } from 'lucide-react';
 
+/**
+ * InsightsDashboard Component - Renders national KPI cards, housing curves, and state rankings.
+ * @returns {React.ReactElement} Rendered InsightsDashboard interface.
+ */
 export const InsightsDashboard: React.FC = () => {
   const { t } = useLanguage();
   const [sectorFilter, setSectorFilter] = useState<'all' | 'urban' | 'rural'>('all');

@@ -1,7 +1,18 @@
+/**
+ * @file aiConciergeEngine.ts
+ * @description Knowledge engine for the GenAI Census Concierge (Samvaad 2027).
+ * Grounded in ORGI protocols and Section 15 of the Census Act 1948.
+ * Provides real-time query parsing, statutory legal citations, 31 Phase I parameters,
+ * and 36 State/UT pre-survey window lookup across 8 Indian languages.
+ */
+
 import { LanguageCode } from '../data/translations';
 import { STATES_DATA } from '../data/statesData';
 import { formatCensusDate, formatCensusDateRange } from './dateUtils';
 
+/**
+ * Chat message model for conversational exchange.
+ */
 export interface ChatMessage {
   id: string;
   sender: 'user' | 'ai';
